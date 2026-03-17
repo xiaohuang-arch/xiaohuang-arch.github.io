@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画峰 - 绘画爱好者社区</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: #f7f9fc;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 画峰 Logo：圆形 + 2cm 大小 */
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            width: 75px;       /* 约 2cm × 2cm */
+            height: 75px;
+            border-radius: 50%; /* 正圆形 */
+            object-fit: cover;
+            border: 2px solid #26b3b3;
+        }
+
+        .box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #26b3b3;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .comment {
+            border-left: 3px solid #26b3b3;
+            padding-left: 12px;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">
+        < img src="https://p.qqan.com/up/2026-3/17427474798757788.png" alt="画峰">
+    </div>
+
+    <div class="box">
+        <h2>内容输入区</h2>
+        <input type="text" placeholder="请输入标题">
+        <textarea rows="4" placeholder="请输入内容"></textarea>
+        <button>发布</button>
+    </div>
+
+    <div class="box">
+        <h2>评论区</h2>
+        <input type="text" placeholder="写下你的评论...">
+        <button>提交评论</button>
+
+        <div class="comment">用户A：画峰这个网站真好看！</div>
+        <div class="comment">用户B：支持！期待更多绘画作品～</div>
+    </div>
+
+</body>
+</html>
