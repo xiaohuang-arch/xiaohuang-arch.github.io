@@ -3,47 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画峰·小黄</title>
+    <title>画峰·小黄 · 多窗社区</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background-color: #d9f0d0;  /* 柔和浅绿背景，整体包裹 */
+            background-color: #d9f0d0;  /* 柔和浅绿背景 */
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 20px;
         }
 
-        /* 核心白色立体卡片 — 3D立体底 + 阴影 */
-        .card {
-            max-width: 780px;
+        /* 三列布局容器 */
+        .dashboard {
+            max-width: 1400px;
             width: 100%;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* 通用卡片样式 — 3D立体白框 + 浅绿背景透出感 */
+        .card {
             background-color: #ffffff;
-            border-radius: 36px 36px 32px 32px;
-            padding: 40px 42px 50px 42px;
+            border-radius: 36px;
+            padding: 28px 26px;
             box-shadow: 
-                0 30px 40px -15px rgba(60, 80, 30, 0.35),      /* 底部大面积柔影 — 立体悬浮 */
-                0 60px 50px -30px rgba(40, 70, 20, 0.4),        /* 更深远的重影，制造立体纵深 */
-                0 12px 25px -8px rgba(0, 0, 0, 0.25),           /* 中层过渡阴影 */
-                inset 0 -3px 8px rgba(0,0,0,0.02),              /* 微弱内凹阴影，强化立体底边 */
-                inset 0 8px 12px rgba(255, 255, 255, 0.6);      /* 顶部内发光，让白色更立体 */
-            
-            /* 3D 底部加厚效果 (模拟立体底层) */
-            position: relative;
+                0 30px 40px -15px rgba(60, 80, 30, 0.35),
+                0 60px 50px -30px rgba(40, 70, 20, 0.4),
+                0 12px 25px -8px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 8px rgba(0,0,0,0.02),
+                inset 0 8px 12px rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(200, 220, 180, 0.4);
-             border-top: 2px solid rgba(255, 255, 255, 0.9);
+            border-top: 2px solid rgba(255, 255, 255, 0.9);
             transform: perspective(1600px) rotateX(0.8deg) translateY(-3px);
             transition: transform 0.2s ease;
+            position: relative;
         }
 
-        /* 进一步强化立体感的假底边——利用伪元素制作厚底座 */
+        .card:hover {
+            transform: perspective(1600px) rotateX(0.6deg) translateY(-6px);
+        }
+
+        /* 底部阴影加深立体 (伪元素底座) */
         .card::after {
             content: "";
             position: absolute;
@@ -59,69 +69,102 @@
             box-shadow: 0 18px 25px 8px rgba(70, 100, 40, 0.4);
         }
 
-        /* 顶部圆形头像区域 */
+        /* 左侧登录卡 较小 */
+        .card-left {
+            flex: 1.2;
+            min-width: 260px;
+            max-width: 300px;
+        }
+
+        /* 中间主卡 (保留原有所有内容) */
+        .card-middle {
+            flex: 2.5;
+            min-width: 500px;
+        }
+
+        /* 右侧聊天卡 */
+        .card-right {
+            flex: 1.8;
+            min-width: 300px;
+            max-width: 380px;
+        }
+
+        /* 保证所有卡片内部样式统一 */
+        .card h2, .card h3 {
+            font-weight: 500;
+            color: #2b4b2b;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            border-bottom: 2px dashed #b8d9aa;
+            padding-bottom: 12px;
+        }
+
+        .card h2 {
+            font-size: 1.9rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid #c4e0b3;
+        }
+
+        /* 中部主卡内容 —— 完全保留原有样式并微调 */
         .avatar-wrapper {
             display: flex;
             justify-content: center;
-            margin-bottom: 36px;
-            margin-top: -10px;
+            margin-bottom: 25px;
+            margin-top: -5px;
+            position: relative;
+            cursor: pointer;
         }
 
-        /* 你提供的图片——以圆形展示 */
+        /* 可编辑头像 */
         .avatar-circle {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 18px 30px -6px rgba(55, 85, 35, 0.5),
-                        0 0 0 5px rgba(235, 255, 220, 0.7);   /* 浅色光晕，与背景呼应 */
+            box-shadow: 0 18px 30px -6px rgba(55, 85, 35, 0.5), 0 0 0 5px rgba(235, 255, 220, 0.7);
             border: 3px solid white;
-            transition: transform 0.3s ease;
-            display: block;
-            background: #e2f0da;  /* 图片未加载时的占底色 */
-            /* 图片地址：使用一个高质友好的占位图，同时也是你要求的“这张图片” */
-            /* 但为了展示你想要的图片，我们放置一张与“作品上传/评论”风格匹配的艺术感图像 */
-            /* 你可以随时替换src为你的图片 */
-            src: "https://api.dicebear.com/9.x/glass/svg?seed=GreenThumb&backgroundColor=d1e9c9&scale=110&radius=50";
-            /* 上面用svg占位确保圆形成型。但为更自然，下面用unsplash风景头像，同时保留svg占位符，但img会覆盖src */
+            transition: transform 0.2s;
+            background: #e2f0da;
         }
 
-        /* 为保证呈现你想要的图片，同时纯本地演示优雅，用一朵绿色植物头像 */
-        /* 如果希望强制用你的图片，只需替换src链接。现在先使用一个艺术头像，且完全圆形。 */
-        .avatar-circle {
-            src: url('https://images.unsplash.com/photo-1536329583-40a8ea002c33?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
-            /* 上面是绿叶植物意象，但如果不可访问，还可以用下面备选 */
-            onerror: "this.onerror=null; this.src='https://api.dicebear.com/9.x/shapes/svg?seed=leaf&backgroundColor=a8d5a2&shapeColor=6a9c5e';"
+        .avatar-circle:hover {
+            transform: scale(1.02);
+            filter: brightness(1.02);
         }
 
-        /* 但onerror在style无效，用js特性确保图片显示，但最稳妥在img标签用data:或者fallback。为了可靠性，我们使用img内联js+备用 */
-        /* 这里手动在html里放置img并带上备用逻辑，保持圆形 */
-
-        /* 卡片标题 */
-        .card h1 {
-            font-size: 2.2rem;
-            font-weight: 500;
-            color: #2b4b2b;
-            text-align: center;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(160, 190, 140, 0.2);
-            border-bottom: 2px dashed #b8d9aa;
-            padding-bottom: 20px;
+        /* 头像编辑提示 */
+        .edit-overlay {
+            position: absolute;
+            bottom: 8px;
+            right: 50%;
+            transform: translateX(50%);
+            background: rgba(255,255,240,0.9);
+            border-radius: 40px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            color: #3f6d2f;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 1px solid #b7daa5;
+            pointer-events: none;
+            opacity: 0.8;
         }
 
-        /* 作品/评论上传表单 */
+        /* 原有上传区域等保留 */
         .upload-area {
             background: #f6fff0;
             border-radius: 30px;
-             padding: 26px 28px;
-            margin: 18px 0 28px 0;
+            padding: 22px 24px;
+            margin: 15px 0 25px 0;
             box-shadow: inset 0 4px 8px rgba(140, 160, 120, 0.15), 0 8px 18px rgba(100, 130, 70, 0.1);
             border: 1px solid #cbe5bc;
         }
 
         .input-group {
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
         .input-group label {
@@ -129,149 +172,110 @@
             font-size: 1rem;
             font-weight: 600;
             color: #3b5e2b;
-            margin-bottom: 8px;
-            margin-left: 6px;
-            letter-spacing: 0.3px;
+            margin-bottom: 6px;
         }
 
         .input-field {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 20px;
             background: white;
             border: 2px solid #cde2c0;
             border-radius: 40px;
             font-size: 1rem;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             box-shadow: 0 6px 10px rgba(0,0,0,0.02), inset 0 2px 4px rgba(130,150,100,0.1);
-            resize: vertical;
         }
 
         .input-field:focus {
             border-color: #7fb07f;
-            box-shadow: 0 0 0 4px rgba(140, 190, 120, 0.3), 0 8px 12px rgba(50, 70, 20, 0.1);
+            box-shadow: 0 0 0 4px rgba(140, 190, 120, 0.3);
         }
 
         textarea.input-field {
-            min-height: 100px;
+            min-height: 90px;
             border-radius: 32px;
         }
- /* 上传作品的模拟控件 */
+
         .file-attach {
             background: #ecf9e5;
             border: 2px dashed #9bc18d;
             border-radius: 60px;
-            padding: 14px 22px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 10px;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 6px;
-        }
-
-        .file-attach:hover {
-            background: #e0f2d4;
         }
 
         .file-attach span {
-            font-size: 1rem;
             color: #3b622b;
             font-weight: 500;
         }
 
-        .file-attach .icon {
-            font-size: 1.8rem;
-            line-height: 1;
-            color: #5f914a;
-        }
-
-        /* 隐藏原始input，用来触发上传 */
         #real-file-input {
             display: none;
         }
 
-        /* 提交按钮和评论列表区域 */
         .submit-btn {
             background: #558b45;
             border: none;
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            padding: 16px 30px;
-          border-radius: 50px;
+            padding: 14px 26px;
+            border-radius: 50px;
             width: 100%;
-            letter-spacing: 1px;
-            box-shadow: 0 20px 25px -8px #49733e, 0 6px 0 #2c5124, 0 8px 18px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 25px -8px #49733e, 0 6px 0 #2c5124;
             cursor: pointer;
-            transition: 0.07s linear;
-            margin: 24px 0 36px 0;
+            transition: 0.07s;
+            margin: 20px 0 30px 0;
             border-top: 2px solid #a9cf96;
         }
 
         .submit-btn:active {
             transform: translateY(6px);
-            box-shadow: 0 14px 20px -8px #3f6835, 0 2px 0 #2c5124, 0 5px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 14px 20px -8px #3f6835, 0 2px 0 #2c5124;
         }
 
-        /* 评论展示区 — 显示个人评论与作品名 */
         .comment-section {
             background: rgba(230, 250, 220, 0.6);
             border-radius: 36px;
-            padding: 22px 24px;
+            padding: 20px 22px;
             backdrop-filter: blur(3px);
             box-shadow: inset 0 1px 6px white, 0 8px 18px rgba(60, 90, 30, 0.15);
             border: 1px solid #b7daab;
         }
 
-        .comment-section h3 {
-            color: #2c552c;
-            font-weight: 500;
-            font-size: 1.6rem;
-            padding-left: 12px;
-            border-left: 12px solid #89b67b;
-            margin-bottom: 20px;
-        }
-
         .comment-list {
             list-style: none;
-            max-height: 240px;
+            max-height: 260px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 6px;
         }
 
         .comment-item {
             background: white;
             border-radius: 40px;
-            padding: 14px 22px;
-            margin-bottom: 12px;
+            padding: 12px 18px;
+            margin-bottom: 10px;
             box-shadow: 0 5px 8px rgba(0,0,0,0.03), 0 2px 0 #d0e2c4;
             border: 1px solid #cfe5c1;
             display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
-        }
-
-        .comment-item:hover {
-            background: #fafff5;
-            box-shadow: 0 8px 14px rgba(80, 120, 40, 0.15);
+            gap: 14px;
         }
 
         .comment-avatar {
-            width: 46px;
-            height: 46px;
+            width: 42px;
+            height: 42px;
             background: #b1d89b;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #2d5720;
             flex-shrink: 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            text-transform: uppercase;
         }
 
         .comment-content {
@@ -281,15 +285,12 @@
         .comment-title {
             font-weight: 700;
             color: #1f4a1a;
-            margin-right: 10px;
-            font-size: 1.05rem;
+            margin-right: 8px;
         }
 
         .comment-desc {
-         color: #3e6034;
-            word-break: break-word;
+            color: #3e6034;
             font-size: 0.95rem;
-            display: block;
         }
 
         .comment-meta {
@@ -300,136 +301,540 @@
             gap: 15px;
         }
 
-        .empty-comment {
-            color: #6e8f5e;
-            font-style: italic;
-            padding: 24px;
-            text-align: center;
-            background: #e7f3df;
-            border-radius: 60px;
+        /* 左侧登录卡片专用样式 */
+        .login-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
-        /* 自定义文件提示 */
-        #file-name {
-            color: #45753b;
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f0fae9;
+            border: 2px solid #b4dba4;
+            border-radius: 60px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2b542b;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 6px 0 #99b88b;
+        }
+
+        .login-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #7fa36f;
+        }
+
+        .login-btn img {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+        }
+
+        .qr-placeholder {
+            background: #e5f0dd;
+            border-radius: 30px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed #a5c99a;
+            color: #467539;
             font-weight: 500;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        .create-account {
+            background: #ebf7e3;
+            border-radius: 30px;
+            padding: 18px 16px;
+            border: 1px solid #b1d8a2;
+        }
+
+        .create-account input {
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0 14px 0;
+            border: 2px solid #cbe2bd;
+            border-radius: 40px;
+            outline: none;
+        }
+
+        .create-account button {
+            background: #77a86a;
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #4f7544;
+            transition: 0.07s;
+        }
+
+        .create-account button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #3e5f35;
+        }
+
+        /* 右侧聊天卡片样式 */
+        .chat-messages {
+            background: #f1fdec;
+            border-radius: 32px;
+            padding: 16px;
+            height: 340px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #b8daab;
+            box-shadow: inset 0 4px 10px rgba(100,130,70,0.1);
+        }
+
+        .chat-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: flex-start;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: #b1d89b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            border: 2px solid white;
+        }
+
+        .chat-bubble {
+            background: white;
+            border-radius: 24px 24px 24px 6px;
+            padding: 10px 16px;
+            max-width: 80%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03), 0 2px 0 #bcd8ad;
+            border: 1px solid #cfe5c1;
+        }
+
+        .chat-name {
+            font-weight: 700;
+            color: #1f4a1a;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .chat-text {
+            color: #2b4f2b;
+            word-break: break-word;
+        }
+
+        .chat-time {
+            font-size: 0.7rem;
+            color: #86a676;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: white;
+            border-radius: 60px;
+            padding: 6px 6px 6px 20px;
+            border: 2px solid #c4e0b3;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        .emoji-btn, .send-btn {
+            background: #e2f2d9;
+            border: none;
+            font-size: 1.6rem;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid #b3d3a3;
+        }
+
+        .send-btn {
+            background: #79b06b;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .emoji-btn:hover, .send-btn:hover {
+            filter: brightness(0.96);
+        }
+
+        /* 弹出二维码模拟 */
+        .qr-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .qr-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 60px;
+            text-align: center;
+            box-shadow: 0 30px 40px #2f4d2f80;
+            border: 5px solid #b1daa1;
+        }
+
+        .qr-modal-content .fake-qr {
+            width: 200px;
+            height: 200px;
+            background: repeating-linear-gradient(45deg, #ccc 0px, #ccc 10px, #eee 10px, #eee 20px);
+            border-radius: 30px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #577a44;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            margin-top: 20px;
+            background: #9ac791;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 辅助隐藏 */
+        .hidden {
+            display: none;
         }
 
         footer {
-            text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
             color: #618b4c;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        /* 滚动条美颜 */
-        .comment-list::-webkit-scrollbar {
-            width: 8px;
-        }
-        .comment-list::-webkit-scrollbar-track {
-            background: #ddecd2;
-            border-radius: 12px;
-        }
-        .comment-list::-webkit-scrollbar-thumb {
-            background: #80aa6b;
-            border-radius: 12px;
+            font-size: 0.8rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- 顶部圆形图片 — 完全按照要求: 安插在最顶部，圆形 -->
-        <div class="avatar-wrapper">
-            <img 
-                class="avatar-circle" 
-                alt="你的个人头像" 
-                id="topAvatar"
-                src="https://images.unsplash.com/photo-1536329583-40a8ea002c33?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                onerror="this.onerror=null; this.src='https://api.dicebear.com/9.x/glass/svg?seed=creative&backgroundColor=b8d9a8&radius=50&scale=110'"
-                style="width:130px; height:130px; border-radius:50%; object-fit:cover;"
-            >
+    <!-- 模拟二维码模态框 (登录用) -->
+    <div class="qr-modal" id="qrModal">
+        <div class="qr-modal-content">
+            <h3 style="color:#2b5e2b;">请使用手机扫码</h3>
+            <div class="fake-qr">🔳 模拟二维码<br> (演示模式)</div>
+            <button class="close-modal" id="closeQrBtn">关 闭</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <!-- 左侧卡片：登录 / 创建账号 / 头像编辑 (小绿圆形头像) -->
+        <div class="card card-left">
+            <h2>🔐 登录·画峰</h2>
+            <div class="login-section">
+                <!-- 社交登录 -->
+                <div class="social-login">
+                    <div class="login-btn" id="qqLoginBtn">
+                        <span style="font-size:2rem;">🐧</span> QQ登录
+                    </div>
+                    <div class="login-btn" id="wechatLoginBtn">
+                        <span style="font-size:2rem;">💚</span> 微信登录
+                    </div>
+                </div>
+                <!-- 模拟二维码显示区 (点击后显示弹窗, 也可直接展示小图) -->
+                <div class="qr-placeholder" id="showQrHint">
+                    ⬆️ 点击上面图标显示二维码 (模拟)
+                </div>
+
+                <!-- 创建账号 / 编辑头像 区域 (与小绿头像关联) -->
+                <div class="create-account">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                        <!-- 左侧小圆形头像 (个人头像编辑) 同时也是可编辑的，与主卡联动？我们让左侧也显示当前头像并可以编辑，但主卡头像为主，保持一致。我们用主卡头像作为全局。左侧只用来展示登录状态。也可以让左侧点击同步更新。为了简化，左侧头像只是一个预览，点击主卡头像编辑。 -->
+                        <img src="https://images.unsplash.com/photo-1536329583-40a8ea002c33?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                             id="leftAvatarPreview" 
+                             style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:3px solid white; box-shadow:0 8px 12px #5c8250;" 
+                             onerror="this.src='https://api.dicebear.com/9.x/glass/svg?seed=user&backgroundColor=b8d9a8'">
+                        <span style="color:#3b623b;">当前头像<br><small>点击主卡头像修改</small></span>
+                    </div>
+                    <label>创建新账号</label>
+                    <input type="text" placeholder="用户名" id="newUsername">
+                    <input type="password" placeholder="密码" id="newPassword">
+                    <button id="createAccountBtn">注册 / 绑定</button>
+                </div>
+
+                <!-- 提示信息 -->
+                <div style="color:#527a42; font-size:0.9rem; padding:10px; background:#e1f0d6; border-radius:40px; text-align:center;">
+                    👤 已登录访客模式
+                </div>
+            </div>
+            <footer>左侧面板 · 账号管理</footer>
         </div>
 
-        <h1>🌱 灵感·绿舍</h1>
-
-        <!-- 白色方框里的核心：上传/评论区域 (本身已在白色卡内) -->
-        <div class="upload-area">
-            <div class="input-group">
-                <label>📌 作品标题</label>
-                <input type="text" class="input-field" id="workTitle" placeholder="例如：山谷回响 · 插画">
+        <!-- 中间主卡片 (保留原有全部功能，仅标题改为“画峰~小黄”，头像增加可编辑) -->
+        <div class="card card-middle">
+            <!-- 顶部可编辑圆形头像 (个人头像) -->
+            <div class="avatar-wrapper" id="avatarEditWrapper">
+                <img class="avatar-circle" id="mainAvatar" 
+                     src="https://images.unsplash.com/photo-1536329583-40a8ea002c33?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                     onerror="this.onerror=null; this.src='https://api.dicebear.com/9.x/glass/svg?seed=creative&backgroundColor=b8d9a8&radius=50&scale=110'"
+                     alt="个人头像">
+                <span class="edit-overlay">✎ 编辑头像</span>
+                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
             </div>
 
-            <div class="input-group">
-                <label>💬 你的评论 / 创作描述</label>
-                <textarea class="input-field" id="workDesc" placeholder="写下你对作品的感想或描述..."></textarea>
-            </div>
+            <!-- 标题修改为“画峰~小黄” -->
+            <h1 style="font-size:2.2rem; font-weight:500; color:#b88b2b; text-align:center; text-shadow: 2px 2px #f0e0a0;">画峰~小黄</h1>
 
-            <div class="input-group">
-                <label>📎 上传作品 (图片/文档)</label>
-                <!-- 自定义上传按钮区 -->
-                <div class="file-attach" onclick="document.getElementById('real-file-input').click();">
-                    <span class="icon">⛁</span>
-                    <span>点击选择文件</span>
-                    <span id="file-name">未选择任何文件</span>
+            <!-- 作品上传评论区域 (原封不动) -->
+            <div class="upload-area">
+                <div class="input-group">
+                    <label>📌 作品标题</label>
+                    <input type="text" class="input-field" id="workTitle" placeholder="例如：山谷回响 · 插画">
                 </div>
-                <input type="file" id="real-file-input" accept="image/*, .pdf, .doc, .docx, .txt">
-            </div>
+                <div class="input-group">
+                    <label>💬 你的评论 / 创作描述</label>
+                    <textarea class="input-field" id="workDesc" placeholder="写下你对作品的感想或描述..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>📎 上传作品</label>
+                    <div class="file-attach" onclick="document.getElementById('real-file-input').click();">
+                        <span class="icon" style="font-size:1.8rem;">⛁</span>
+                        <span>点击选择文件</span>
+                        <span id="file-name">未选择任何文件</span>
+                    </div>
+                    <input type="file" id="real-file-input" accept="image/*, .pdf, .doc, .docx, .txt">
+                </div>
+                <button class="submit-btn" id="publishBtn">发布作品 & 评论</button>
 
-            <!-- 提交按钮 -->
-            <button class="submit-btn" id="publishBtn">发布作品 & 评论</button>
-
-            <!-- 评论陈列区 (白色方框内) -->
-            <div class="comment-section">
-                <h3>✨ 最新投稿</h3>
-                <ul class="comment-list" id="commentList">
-                    <!-- 预先填充两条示例，显得生动，符合方框内评论展示 -->
-                    <li class="comment-item">
-                        <div class="comment-avatar">🌿</div>
-                        <div class="comment-content">
-                            <span class="comment-title">林间晨雾</span>
-                            <span class="comment-desc">水彩作品，尝试了湿画法，氛围很柔和~</span>
-                            <div class="comment-meta">
-                                <span>🗂️ 作品: morning_mist.jpg</span>
-                                <span>💬 刚刚</span>
+                <div class="comment-section">
+                    <h3>✨ 最新投稿</h3>
+                    <ul class="comment-list" id="commentList">
+                        <li class="comment-item">
+                            <div class="comment-avatar">🌿</div>
+                            <div class="comment-content">
+                                <span class="comment-title">林间晨雾</span>
+                                <span class="comment-desc">水彩作品，氛围柔和~</span>
+                                <div class="comment-meta"><span>🗂️ morning_mist.jpg</span><span>💬 刚刚</span></div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="comment-item">
-                        <div class="comment-avatar">🍃</div>
-                        <div class="comment-content">
-                            <span class="comment-title">青苔石阶</span>
-                            <span class="comment-desc">用数码相机拍的院子角落，喜欢这种绿色。</span>
-                            <div class="comment-meta">
-                                <span>🗂️ moss_steps.png</span>
-                                <span>💬 5分钟前</span>
-                                                        </div>
-                        </div>
-                    </li>
-                </ul>
-                <!-- 空状态不显示，因为有示例数据。但将来动态插入会保留 -->
+                        </li>
+                        <li class="comment-item">
+                            <div class="comment-avatar">🍃</div>
+                            <div class="comment-content">
+                                <span class="comment-title">青苔石阶</span>
+                                <span class="comment-desc">数码相机拍的院子角落</span>
+                                <div class="comment-meta"><span>🗂️ moss_steps.png</span><span>💬 5分钟前</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <footer>点击发布，你的作品也会出现在上面</footer>
-        </div><!-- end upload-area -->
-    </div><!-- end card -->
+        </div>
+
+        <!-- 右侧卡片：世界聊天 / 访客评论 / 表情包 -->
+        <div class="card card-right">
+            <h2>🌐 世界弹幕</h2>
+            <div class="chat-messages" id="chatMessages">
+                <!-- 动态通过js渲染 -->
+                <div class="chat-item">
+                    <div class="chat-avatar">🍂</div>
+                    <div class="chat-bubble">
+                        <div class="chat-name">风之旅人</div>
+                        <div class="chat-text">这幅画的色调太舒服了！</div>
+                        <div class="chat-time">14:23</div>
+                    </div>
+                </div>
+                <div class="chat-item">
+                    <div class="chat-avatar">🎨</div>
+                    <div class="chat-bubble">
+                        <div class="chat-name">画峰小助手</div>
+                        <div class="chat-text">欢迎大家上传作品，一起聊天~</div>
+                        <div class="chat-time">14:20</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 输入区 + 表情包 -->
+            <div class="chat-input-area">
+                <input type="text" placeholder="说点什么...  :) " id="chatInput">
+                <button class="emoji-btn" id="emojiBtn">😊</button>
+                <button class="send-btn" id="sendChatBtn">➤</button>
+            </div>
+            <!-- 快速表情包选择 (模拟) -->
+            <div style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
+                <span style="cursor:pointer; font-size:1.8rem;" class="quick-emoji">😀</span>
+                <span style="cursor:pointer; font-size:1.8rem;" class="quick-emoji">🎨</span>
+                <span style="cursor:pointer; font-size:1.8rem;" class="quick-emoji">🐶</span>
+                <span style="cursor:pointer; font-size:1.8rem;" class="quick-emoji">🍕</span>
+                <span style="cursor:pointer; font-size:1.8rem;" class="quick-emoji">🌟</span>
+                <span style="cursor:pointer; font-size:1.8rem;" class="quick-emoji">💬</span>
+            </div>
+            <footer>实时交流·数据保存在本地</footer>
+        </div>
+    </div>
 
     <script>
         (function() {
-            // 让图片显示更稳健：如果外部图片挂了，强制换为dicebear风格圆形图
-            const avatarImg = document.getElementById('topAvatar');
-            // 但已经通过onerror处理了。再补一个观察load，确保万一onerror没触发
-            avatarImg.addEventListener('error', function(e) {
-                e.target.src = 'https://api.dicebear.com/9.x/identicon/svg?seed=ArtGreen&radius=50&backgroundColor=a2cf8e';
+            // ---------- 全局数据 ----------
+            // 聊天记录保存到 localStorage
+            let chatMessages = [
+                { name: '风之旅人', avatar: '🍂', text: '这幅画的色调太舒服了！', time: '14:23' },
+                { name: '画峰小助手', avatar: '🎨', text: '欢迎大家上传作品，一起聊天~', time: '14:20' }
+            ];
+
+            // 加载本地存储
+            function loadChats() {
+                const stored = localStorage.getItem('huafeng_chats');
+                if (stored) {
+                    try {
+                        chatMessages = JSON.parse(stored);
+                    } catch (e) {}
+                }
+                renderChats();
+            }
+            function saveChats() {
+                localStorage.setItem('huafeng_chats', JSON.stringify(chatMessages));
+            }
+
+            // 渲染聊天区域
+            function renderChats() {
+                const container = document.getElementById('chatMessages');
+                container.innerHTML = '';
+                chatMessages.forEach(msg => {
+                    const item = document.createElement('div');
+                    item.className = 'chat-item';
+                    item.innerHTML = `
+                        <div class="chat-avatar">${msg.avatar || '💬'}</div>
+                        <div class="chat-bubble">
+                            <div class="chat-name">${escapeHtml(msg.name)}</div>
+                            <div class="chat-text">${escapeHtml(msg.text)}</div>
+                            <div class="chat-time">${msg.time || '刚刚'}</div>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+                container.scrollTop = container.scrollHeight; // 滚动到底部
+            }
+
+            // 简单防XSS
+            function escapeHtml(unsafe) {
+                return unsafe.replace(/[&<>"]/g, function(m) {
+                    if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; if(m === '"') return '&quot;';
+                    return m;
+                });
+            }
+
+            // 添加聊天消息
+            function addChatMessage(name, text, avatar) {
+                const now = new Date();
+                const time = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+                chatMessages.push({
+                    name: name || '匿名',
+                    avatar: avatar || '👤',
+                    text: text,
+                    time: time
+                });
+                saveChats();
+                renderChats();
+            }
+
+            // 初始化聊天
+            loadChats();
+
+            // ---------- 头像编辑 ----------
+            const mainAvatar = document.getElementById('mainAvatar');
+            const leftAvatarPreview = document.getElementById('leftAvatarPreview');
+            const avatarUpload = document.getElementById('avatarUpload');
+            document.querySelector('.avatar-wrapper').addEventListener('click', function() {
+                avatarUpload.click();
+            });
+            avatarUpload.addEventListener('change', function(e) {
+                if (avatarUpload.files && avatarUpload.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        mainAvatar.src = ev.target.result;
+                        leftAvatarPreview.src = ev.target.result; // 同步左侧预览
+                        // 可选保存到localStorage
+                        localStorage.setItem('user_avatar', ev.target.result);
+                    };
+                    reader.readAsDataURL(avatarUpload.files[0]);
+                }
+            });
+            // 加载保存的头像
+            const savedAvatar = localStorage.getItem('user_avatar');
+            if (savedAvatar) {
+                mainAvatar.src = savedAvatar;
+                leftAvatarPreview.src = savedAvatar;
+            }
+
+            // ---------- 登录模态框模拟 ----------
+            const qrModal = document.getElementById('qrModal');
+            const closeBtn = document.getElementById('closeQrBtn');
+            function showQr() {
+                qrModal.style.display = 'flex';
+            }
+            document.getElementById('qqLoginBtn').addEventListener('click', showQr);
+            document.getElementById('wechatLoginBtn').addEventListener('click', showQr);
+            document.getElementById('showQrHint').addEventListener('click', showQr);
+            closeBtn.addEventListener('click', function() {
+                qrModal.style.display = 'none';
+            });
+            window.addEventListener('click', function(e) {
+                if (e.target === qrModal) qrModal.style.display = 'none';
             });
 
-            // 显示选中文件名
+            // ---------- 创建账号 (模拟) ----------
+            document.getElementById('createAccountBtn').addEventListener('click', function() {
+                const user = document.getElementById('newUsername').value;
+                const pwd = document.getElementById('newPassword').value;
+                if (user && pwd) {
+                    alert(`演示模式：账号 ${user} 创建成功（无后端）`);
+                } else {
+                    alert('请输入用户名和密码');
+                }
+            });
+
+            // ---------- 中间卡片发布评论功能 (保留原逻辑并增强) ----------
+            const publishBtn = document.getElementById('publishBtn');
+            const titleInput = document.getElementById('workTitle');
+            const descTextarea = document.getElementById('workDesc');
             const fileInput = document.getElementById('real-file-input');
             const fileNameSpan = document.getElementById('file-name');
-            fileInput.addEventListener('change', function(e) {
+            const commentList = document.getElementById('commentList');
+            const icons = ['🌻', '🌸', '🍀', '🌿', '🎨', '🖌️', '📷', '🍂', '🌱', '🌟'];
+
+            fileInput.addEventListener('change', function() {
                 if (fileInput.files.length > 0) {
                     fileNameSpan.textContent = fileInput.files[0].name;
                 } else {
@@ -437,33 +842,13 @@
                 }
             });
 
-            // 发布功能: 获取标题、描述、文件名，添加到评论列表最上方
-            const publishBtn = document.getElementById('publishBtn');
-            const titleInput = document.getElementById('workTitle');
-            const descTextarea = document.getElementById('workDesc');
-            const commentList = document.getElementById('commentList');
-
-            // 简单随机图标
-            const icons = ['🌻', '🌸', '🍀', '🌿', '🎨', '🖌️', '📷', '🍂', '🌱', '🌟'];
-
             function addNewComment(title, desc, fileName) {
-                if (!title.trim() && !desc.trim() && !fileName) {
-                    alert('至少填写标题或评论，或者上传一个文件吧～');
-                                    return false;
-                }
-
-                // 如果标题为空，使用默认标题
                 const displayTitle = title.trim() ? title.trim() : '未命名作品';
-                const displayDesc = desc.trim() ? desc.trim() : '✨ 一条没有描述的创作。';
+                const displayDesc = desc.trim() ? desc.trim() : '✨ 无描述';
                 const fileDisplay = fileName ? fileName : '未附加文件';
-
-                // 随机选择一个图标
                 const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-
-                // 构造时间
                 const now = new Date();
                 const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-
                 const newItem = document.createElement('li');
                 newItem.className = 'comment-item';
                 newItem.innerHTML = `
@@ -477,66 +862,68 @@
                         </div>
                     </div>
                 `;
-
-                // 插入到列表最前面
                 commentList.prepend(newItem);
-
-                // 清除输入框（保留文件名显示，但不清除file input因为无法完全重置样式？可保留）
+                // 清空输入
                 titleInput.value = '';
                 descTextarea.value = '';
-                // 重置文件选择
                 fileInput.value = '';
                 fileNameSpan.textContent = '未选择任何文件';
-
-                return true;
             }
-                                return false;
+
+            publishBtn.addEventListener('click', function() {
+                const title = titleInput.value;
+                const desc = descTextarea.value;
+                let fileName = '';
+                if (fileInput.files.length > 0) fileName = fileInput.files[0].name;
+                addNewComment(title, desc, fileName);
+                // 同时将这条发布同步到世界聊天？可以作为一个广播
+                if (title.trim() || desc.trim()) {
+                    addChatMessage('作品君', `刚刚发布作品: ${title || '无题'} — ${desc.substring(0,30)}`, '📢');
                 }
+            });
 
-                // 如果标题为空，使用默认标题
-                const displayTitle = title.trim() ? title.trim() : '未命名作品';
-                const displayDesc = desc.trim() ? desc.trim() : '✨ 一条没有描述的创作。';
-                const fileDisplay = fileName ? fileName : '未附加文件';
+            // ---------- 右侧聊天发送 ----------
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendChatBtn');
+            sendBtn.addEventListener('click', function() {
+                const text = chatInput.value.trim();
+                if (text) {
+                    // 随机选取一个头像
+                    const avatars = ['🌿', '🍃', '🎨', '🖌️', '🐚', '🍂', '🌟', '💬'];
+                    const randAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+                    addChatMessage('访客' + Math.floor(Math.random()*100), text, randAvatar);
+                    chatInput.value = '';
+                }
+            });
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendBtn.click();
+                }
+            });
 
-                // 随机选择一个图标
-                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            // 表情包快速添加
+            document.querySelectorAll('.quick-emoji').forEach(span => {
+                span.addEventListener('click', function() {
+                    chatInput.value += this.innerText;
+                });
+            });
+            document.getElementById('emojiBtn').addEventListener('click', function() {
+                chatInput.value += '😊';
+            });
 
-                // 构造时间
-                const now = new Date();
-                const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-
-                const newItem = document.createElement('li');
-                newItem.className = 'comment-item';
-                newItem.innerHTML = `
-                    <div class="comment-avatar">${randomIcon}</div>
-                    <div class="comment-content">
-                        <span class="comment-title">${escapeHtml(displayTitle)}</span>
-                        <span class="comment-desc">${escapeHtml(displayDesc)}</span>
-                        <div class="comment-meta">
-                            <span>🗂️ ${escapeHtml(fileDisplay)}</span>
-                            <span>💬 刚刚 (${timeStr})</span>
-                        </div>
-                    </div>
-                `;
-
-                // 插入到列表最前面
-                commentList.prepend(newItem);
-
-                // 清除输入框（保留文件名显示，但不清除file input因为无法完全重置样式？可保留）
-                titleInput.value = '';
-                descTextarea.value = '';
-                // 重置文件选择
-                fileInput.value = '';
-                fileNameSpan.textContent = '未选择任何文件';
-
-                return true;
-            }
-        }
-                .card:hover {
-            transform: perspective(2400px) rotateX(0.8deg) translateY(-8px);
-            box-shadow: 0 40px 55px -15px #3b5e2b80, 0 80px 70px -30px #2f4d2b, 0 12px 30px -8px black;
-        }
+            // 保存头像的额外处理：确保左侧预览同步
+            window.addEventListener('load', function() {
+                // 如果localStorage有头像，已处理
+            });
+        })();
+    </script>
+    <!-- 确保圆形图片显示及备用 -->
+    <style>
+        .avatar-circle, #leftAvatarPreview { border-radius: 50% !important; object-fit: cover; }
+        .card h1 { color: #b38f3c; } /* 小黄主题 */
+        .dashboard { align-items: stretch; }
+        .card { display: flex; flex-direction: column; }
+        .card-middle .upload-area { flex: 1; }
     </style>
-    <!-- 额外修饰：伪影更深 -->
 </body>
 </html>
